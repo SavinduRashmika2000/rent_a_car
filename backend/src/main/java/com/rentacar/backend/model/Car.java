@@ -29,4 +29,5 @@ public class Car {
     private Double price;
     private Double originalPrice;
     private String image;
+    private boolean available = true;
 }
