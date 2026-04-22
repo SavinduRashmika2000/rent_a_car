@@ -1,10 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, Bell } from 'lucide-react';
+import { Menu, Bell, User as UserIcon, LogOut } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
   const navigate = useNavigate();
+  const { user, logout } = useAuth();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -12,20 +15,34 @@ const Header = () => {
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="flex justify-between items-center mb-8 md:mb-12"
     >
-      {/* Mobile Menu */}
-      <motion.button
-        whileTap={{ scale: 0.88 }}
-        className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 lg:hidden"
-      >
-        <Menu size={24} className="text-gray-700" />
-      </motion.button>
+      <div className="flex items-center gap-4">
+        {/* Mobile Menu */}
+        <motion.button
+          whileTap={{ scale: 0.88 }}
+          className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 lg:hidden"
+        >
+          <Menu size={24} className="text-gray-700" />
+        </motion.button>
+
+        {/* Left Signup Option (as requested) */}
+        {!user && (
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigate('/signup')}
+            className="hidden lg:flex items-center gap-2 text-sm font-bold text-blue-600 hover:bg-blue-50 px-4 py-2 rounded-xl transition-colors"
+          >
+            Signup
+          </motion.button>
+        )}
+      </div>
 
       {/* Desktop Logo */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.15 }}
-        className="hidden lg:flex items-center gap-3"
+        onClick={() => navigate('/')}
+        className="hidden lg:flex items-center gap-3 cursor-pointer"
       >
         <div className="w-12 h-12 bg-blue-600 rounded-[1.25rem] flex items-center justify-center text-white font-bold text-2xl shadow-md shadow-blue-200">R</div>
         <span className="text-2xl font-bold text-gray-900 tracking-tight">RentAuto</span>
@@ -49,30 +66,39 @@ const Header = () => {
 
       {/* User Section */}
       <div className="flex items-center gap-4">
-        <div className="text-right hidden sm:block">
-          <p className="text-gray-400 text-sm">Welcome back,</p>
-          <h2 className="text-lg font-bold text-gray-900">John Smith 👋</h2>
-        </div>
-        <motion.button
-          whileTap={{ scale: 0.88 }}
-          className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 relative hidden sm:flex items-center justify-center"
-        >
-          <Bell size={24} className="text-gray-700" />
-          <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-blue-600 border-2 border-white rounded-full"></span>
-        </motion.button>
-
-        {/* Mobile Welcome */}
-        <div className="text-center sm:hidden">
-          <p className="text-gray-400 text-xs">Welcome back,</p>
-          <h2 className="text-base font-bold text-gray-900">John Smith 👋</h2>
-        </div>
-        <motion.button
-          whileTap={{ scale: 0.88 }}
-          className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 relative sm:hidden"
-        >
-          <Bell size={22} className="text-gray-700" />
-          <span className="absolute top-3 right-3 w-2.5 h-2.5 bg-blue-600 border-2 border-white rounded-full"></span>
-        </motion.button>
+        {user ? (
+          <>
+            <div className="text-right hidden sm:block">
+              <p className="text-gray-400 text-sm">Welcome back,</p>
+              <h2 className="text-lg font-bold text-gray-900">{user.name} 👋</h2>
+            </div>
+            <motion.button
+              whileTap={{ scale: 0.88 }}
+              onClick={logout}
+              className="p-3 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center justify-center text-gray-400 hover:text-red-500 transition-colors"
+              title="Logout"
+            >
+              <LogOut size={24} />
+            </motion.button>
+          </>
+        ) : (
+          <div className="flex items-center gap-3">
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/login')}
+              className="px-5 py-2.5 bg-white border border-gray-100 rounded-2xl shadow-sm text-sm font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+            >
+              Login
+            </motion.button>
+            <motion.button
+              whileTap={{ scale: 0.95 }}
+              onClick={() => navigate('/signup')}
+              className="hidden sm:block px-5 py-2.5 bg-blue-600 rounded-2xl shadow-md shadow-blue-200 text-sm font-bold text-white hover:bg-blue-700 transition-colors"
+            >
+              Get Started
+            </motion.button>
+          </div>
+        )}
       </div>
     </motion.div>
   );
