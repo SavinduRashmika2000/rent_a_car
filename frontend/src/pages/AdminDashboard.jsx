@@ -384,8 +384,8 @@ const AdminDashboard = () => {
                               <div className="space-y-1"><div className="flex items-center gap-1"><MapPin size={10} /> {c.location}</div><div className="flex items-center gap-1 font-bold text-gray-900"><DollarSign size={10} /> {c.price}/day</div></div>}
                             </td>
                             <td className="px-6 py-5">
-                              {editingCar?.id === c.id ? <button onClick={() => setEditingCar({...editingCar, available: !editingCar.available})} className={`px-4 py-2 rounded-2xl text-[10px] font-black ${editingCar.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{editingCar.available ? 'AVAILABLE' : 'RESERVED'}</button> : 
-                              <div className={`inline-flex px-4 py-2 rounded-2xl text-[10px] font-black ${c.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{c.available ? 'AVAILABLE' : 'RESERVED'}</div>}
+                              {editingCar?.id === c.id ? <button onClick={() => setEditingCar({...editingCar, available: !editingCar.available})} className={`px-4 py-2 rounded-2xl text-[10px] font-black ${editingCar.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{editingCar.available ? 'AVAILABLE' : 'NOT AVAILABLE'}</button> : 
+                              <div className={`inline-flex px-4 py-2 rounded-2xl text-[10px] font-black ${c.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{c.available ? 'AVAILABLE' : 'NOT AVAILABLE'}</div>}
                             </td>
                             <td className="px-6 py-5 text-right">
                               {editingCar?.id === c.id ? <div className="flex justify-end gap-2"><button onClick={handleUpdateCar} className="p-2 bg-green-600 text-white rounded-lg"><Check size={14} /></button><button onClick={() => setEditingCar(null)} className="p-2 bg-gray-200 text-gray-600 rounded-lg"><X size={14} /></button></div> : 
