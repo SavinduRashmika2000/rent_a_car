@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, Bell, User as UserIcon, LogOut } from 'lucide-react';
+import { Menu, Bell, User as UserIcon, LogOut, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
