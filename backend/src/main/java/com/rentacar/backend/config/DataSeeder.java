@@ -1,10 +1,13 @@
 package com.rentacar.backend.config;
 
-import com.rentacar.backend.model.Car;
+import com.rentacar.backend.model.Role;
+import com.rentacar.backend.model.User;
 import com.rentacar.backend.repository.CarRepository;
+import com.rentacar.backend.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -12,10 +15,14 @@ import java.util.List;
 public class DataSeeder {
 
     @Bean
-    CommandLineRunner initDatabase(CarRepository repository) {
+    CommandLineRunner initDatabase(CarRepository carRepository, UserRepository userRepository, PasswordEncoder encoder) {
         return args -> {
-            if (repository.count() == 0) {
-                repository.saveAll(List.of(
+            if (userRepository.count() == 0) {
+                userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN));
+                System.out.println("Admin user created: admin@rentacar.com / admin123");
+            }
+            if (carRepository.count() == 0) {
+                carRepository.saveAll(List.of(
                     new Car(null, "BMW X5 2024", 4.8, "SUV", "Automatic", "Petrol", 5, "New York", 120.0, 150.0, "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600"),
                     new Car(null, "Mercedes C-Class 2024", 4.6, "Sedan", "Automatic", "Petrol", 5, "Los Angeles", 95.0, 120.0, "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600"),
                     new Car(null, "Toyota RAV4 2024", 4.5, "SUV", "Automatic", "Petrol", 5, "Chicago", 80.0, 100.0, "https://images.unsplash.com/photo-1621007947382-34dd86bbaee3?auto=format&fit=crop&q=80&w=600"),
