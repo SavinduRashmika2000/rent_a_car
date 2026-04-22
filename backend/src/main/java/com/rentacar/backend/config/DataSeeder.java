@@ -18,9 +18,13 @@ public class DataSeeder {
     @Bean
     CommandLineRunner initDatabase(CarRepository carRepository, UserRepository userRepository, PasswordEncoder encoder) {
         return args -> {
-            if (userRepository.count() == 0) {
+            if (userRepository.count() <= 1) {
+                userRepository.deleteAll(); // Clear and re-seed for development
                 userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN, true));
-                System.out.println("Admin user created: admin@rentacar.com / admin123");
+                userRepository.save(new User(null, "John Doe", "john@example.com", "0771112223", encoder.encode("user123"), Role.CUSTOMER, true));
+                userRepository.save(new User(null, "Jane Smith", "jane@example.com", "0774445556", encoder.encode("user123"), Role.CUSTOMER, true));
+                userRepository.save(new User(null, "Michael Brown", "michael@example.com", "0778889990", encoder.encode("user123"), Role.CUSTOMER, false)); // Deactivated user
+                System.out.println("Admin and sample users created.");
             }
             if (carRepository.count() == 0) {
                 carRepository.saveAll(List.of(
