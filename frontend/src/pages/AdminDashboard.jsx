@@ -37,7 +37,7 @@ const AdminDashboard = () => {
   const [message, setMessage] = useState({ type: '', text: '' });
 
   // Protected route check
-  if (!user || !user.roles.includes('ROLE_ADMIN')) {
+  if (!user || !user.roles?.includes('ROLE_ADMIN')) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center p-5 text-center">
         <Shield size={64} className="text-red-500 mb-4" />

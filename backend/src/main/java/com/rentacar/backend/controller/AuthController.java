@@ -54,6 +54,7 @@ public class AuthController {
                     userDetails.getId(),
                     userDetails.getEmail(),
                     userDetails.getPhone(),
+                    userDetails.getName(),
                     roles));
         } catch (org.springframework.security.authentication.DisabledException e) {
             return ResponseEntity.badRequest().body("Error: Your account has been deactivated. Please contact support.");

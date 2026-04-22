@@ -39,7 +39,8 @@ public class DataSeeder {
                 System.out.println("Database seeded with sample cars.");
             }
 
-            if (reservationRepository.count() == 0) {
+            if (reservationRepository.count() == 0 || reservationRepository.count() < 5) {
+                reservationRepository.deleteAll();
                 List<User> customers = userRepository.findAll().stream().filter(u -> u.getRole() == Role.CUSTOMER).toList();
                 List<Car> cars = carRepository.findAll();
                 
@@ -48,6 +49,12 @@ public class DataSeeder {
                         LocalDate.now().plusDays(1), LocalDate.now().plusDays(5), 480.0, "CONFIRMED"));
                     reservationRepository.save(new Reservation(null, cars.get(1), customers.get(1), 
                         LocalDate.now().plusDays(2), LocalDate.now().plusDays(4), 190.0, "PENDING"));
+                    reservationRepository.save(new Reservation(null, cars.get(2), customers.get(0), 
+                        LocalDate.now().minusDays(10), LocalDate.now().minusDays(7), 240.0, "COMPLETED"));
+                    reservationRepository.save(new Reservation(null, cars.get(3), customers.get(1), 
+                        LocalDate.now().plusDays(10), LocalDate.now().plusDays(15), 550.0, "CANCELLED"));
+                    reservationRepository.save(new Reservation(null, cars.get(4), customers.get(0), 
+                        LocalDate.now().plusDays(20), LocalDate.now().plusDays(25), 450.0, "PENDING"));
                     System.out.println("Database seeded with sample reservations.");
                 }
             }
