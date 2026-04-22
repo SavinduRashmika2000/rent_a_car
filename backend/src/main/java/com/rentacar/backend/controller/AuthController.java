@@ -38,23 +38,28 @@ public class AuthController {
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = jwtUtils.generateTokenFromUsername(authentication.getName());
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateTokenFromUsername(authentication.getName());
+            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            List<String> roles = userDetails.getAuthorities().stream()
+                    .map(item -> item.getAuthority())
+                    .collect(Collectors.toList());
 
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-        List<String> roles = userDetails.getAuthorities().stream()
-                .map(item -> item.getAuthority())
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getId(),
-                userDetails.getEmail(),
-                userDetails.getPhone(),
-                roles));
+            return ResponseEntity.ok(new JwtResponse(jwt,
+                    userDetails.getId(),
+                    userDetails.getEmail(),
+                    userDetails.getPhone(),
+                    roles));
+        } catch (org.springframework.security.authentication.DisabledException e) {
+            return ResponseEntity.badRequest().body("Error: Your account has been deactivated. Please contact support.");
+        } catch (org.springframework.security.core.AuthenticationException e) {
+            return ResponseEntity.badRequest().body("Error: Invalid username or password.");
+        }
     }
 
     @PostMapping("/signup")
@@ -73,7 +78,8 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 signUpRequest.getPhone(),
                 encoder.encode(signUpRequest.getPassword()),
-                Role.CUSTOMER);
+                Role.CUSTOMER,
+                true);
 
         String strRole = signUpRequest.getRole();
         if (strRole != null && strRole.equalsIgnoreCase("ADMIN")) {
