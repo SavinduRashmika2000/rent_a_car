@@ -68,6 +68,16 @@ const Header = () => {
       <div className="flex items-center gap-4">
         {user ? (
           <>
+            {user.roles.includes('ROLE_ADMIN') && (
+              <motion.button
+                whileTap={{ scale: 0.95 }}
+                onClick={() => navigate('/admin')}
+                className="hidden lg:flex items-center gap-2 px-4 py-2 bg-gray-900 rounded-xl text-xs font-bold text-white hover:bg-black transition-colors mr-2"
+              >
+                <Shield size={14} />
+                Admin Panel
+              </motion.button>
+            )}
             <div className="text-right hidden sm:block">
               <p className="text-gray-400 text-sm">Welcome back,</p>
               <h2 className="text-lg font-bold text-gray-900">{user.name} 👋</h2>

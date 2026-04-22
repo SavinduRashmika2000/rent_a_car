@@ -6,6 +6,7 @@ import SearchResults from './pages/SearchResults';
 import CarDetails from './pages/CarDetails';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import AdminDashboard from './pages/AdminDashboard';
 import BottomNav from './components/Common/BottomNav';
 import { AuthProvider } from './context/AuthContext';
 
@@ -19,6 +20,7 @@ const AnimatedRoutes = () => {
         <Route path="/car/:id" element={<CarDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </AnimatePresence>
   );

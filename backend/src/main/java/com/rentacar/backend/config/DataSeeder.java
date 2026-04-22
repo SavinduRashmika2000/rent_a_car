@@ -1,5 +1,6 @@
 package com.rentacar.backend.config;
 
+import com.rentacar.backend.model.Car;
 import com.rentacar.backend.model.Role;
 import com.rentacar.backend.model.User;
 import com.rentacar.backend.repository.CarRepository;
