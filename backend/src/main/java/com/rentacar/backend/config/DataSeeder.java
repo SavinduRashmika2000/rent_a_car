@@ -19,7 +19,7 @@ public class DataSeeder {
     CommandLineRunner initDatabase(CarRepository carRepository, UserRepository userRepository, PasswordEncoder encoder) {
         return args -> {
             if (userRepository.count() == 0) {
-                userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN));
+                userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN, true));
                 System.out.println("Admin user created: admin@rentacar.com / admin123");
             }
             if (carRepository.count() == 0) {
