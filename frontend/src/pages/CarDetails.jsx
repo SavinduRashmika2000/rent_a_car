@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   ArrowLeft, Heart, Share2, ImageIcon,
@@ -8,25 +8,47 @@ import {
 } from 'lucide-react';
 import PageTransition from '../components/Common/PageTransition';
 
-const specs = [
-  { icon: Droplet, label: 'Fuel Type', value: 'Petrol' },
-  { icon: Gauge, label: 'Engine', value: '3.0L' },
-  { icon: Gauge, label: 'Mileage', value: '12 km/l' },
-  { icon: Settings, label: 'Transmission', value: 'Automatic' },
-  { icon: CarFront, label: 'Doors', value: '5' },
-  { icon: Briefcase, label: 'Luggage', value: '2 Bags' },
-  { icon: Wind, label: 'Air Conditioning', value: 'Yes' },
-  { icon: Bluetooth, label: 'Bluetooth', value: 'Yes' },
-];
-
 const checks = ['Unlimited KM', 'Free Cancellation', 'No Hidden Charges'];
 
 const CarDetails = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [car, setCar] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, []);
+    
+    fetch(`http://localhost:8080/api/cars/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        setCar(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching car details:', err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading car details...</div>;
+  }
+
+  if (!car) {
+    return <div className="min-h-screen flex items-center justify-center">Car not found</div>;
+  }
+
+  const specs = [
+    { icon: Droplet, label: 'Fuel Type', value: car.fuel },
+    { icon: Gauge, label: 'Engine', value: '3.0L' }, // Static for now as not in DB
+    { icon: Gauge, label: 'Mileage', value: '12 km/l' }, // Static for now
+    { icon: Settings, label: 'Transmission', value: car.transmission },
+    { icon: CarFront, label: 'Doors', value: '5' }, // Static for now
+    { icon: Briefcase, label: 'Luggage', value: '2 Bags' }, // Static for now
+    { icon: Wind, label: 'Air Conditioning', value: 'Yes' },
+    { icon: Bluetooth, label: 'Bluetooth', value: 'Yes' },
+  ];
 
   return (
     <PageTransition>
@@ -43,8 +65,8 @@ const CarDetails = () => {
             initial={{ scale: 1.08 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.7, ease: 'easeOut' }}
-            src="https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=1400"
-            alt="BMW X5 2024"
+            src={car.image}
+            alt={car.name}
             className="w-full h-full object-cover"
           />
 
@@ -92,14 +114,14 @@ const CarDetails = () => {
           >
             {/* Title */}
             <div className="flex justify-between items-start mb-2">
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">BMW X5 2024</h1>
+              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">{car.name}</h1>
               <div className="flex items-center gap-1.5 bg-yellow-50 px-3 py-1.5 rounded-xl shrink-0 ml-3">
                 <span className="text-yellow-400 text-sm">★</span>
-                <span className="text-sm font-bold text-gray-900">4.8</span>
+                <span className="text-sm font-bold text-gray-900">{car.rating}</span>
                 <span className="text-xs text-gray-400 font-medium">(120)</span>
               </div>
             </div>
-            <p className="text-sm text-gray-500 mb-5">SUV • Automatic • Petrol</p>
+            <p className="text-sm text-gray-500 mb-5">{car.type} • {car.transmission} • {car.fuel}</p>
 
             {/* Spec Tags */}
             <div className="flex flex-wrap gap-2 mb-8">
@@ -128,11 +150,11 @@ const CarDetails = () => {
               <div>
                 <p className="text-xs text-gray-500 font-medium mb-1">Price per day</p>
                 <div className="flex items-baseline gap-1 mb-1">
-                  <span className="text-4xl font-bold text-blue-600">$120</span>
+                  <span className="text-4xl font-bold text-blue-600">${car.price}</span>
                   <span className="text-sm text-gray-500 font-medium">/day</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <p className="text-gray-400 line-through text-sm">$150</p>
+                  <p className="text-gray-400 line-through text-sm">${car.originalPrice}</p>
                   <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-md">20% OFF</span>
                 </div>
               </div>
@@ -164,7 +186,7 @@ const CarDetails = () => {
                       <div className="p-2 bg-gray-50 rounded-full"><MapPin size={17} className="text-gray-700" /></div>
                       <div>
                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Pick-up</p>
-                        <p className="text-sm font-bold text-gray-900">New York Airport (JFK)</p>
+                        <p className="text-sm font-bold text-gray-900">{car.location} Airport</p>
                       </div>
                     </div>
                     <div className="text-right shrink-0 ml-3">
@@ -181,7 +203,7 @@ const CarDetails = () => {
                       <div className="p-2 bg-gray-50 rounded-full"><MapPin size={17} className="text-gray-700" /></div>
                       <div>
                         <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Drop-off</p>
-                        <p className="text-sm font-bold text-gray-900">New York Airport (JFK)</p>
+                        <p className="text-sm font-bold text-gray-900">{car.location} Airport</p>
                       </div>
                     </div>
                     <div className="text-right shrink-0 ml-3">
@@ -223,13 +245,13 @@ const CarDetails = () => {
               <div className="border-b border-gray-100 pb-5 mb-5">
                 <p className="text-sm font-medium text-gray-400 mb-1">Total Price</p>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="text-4xl font-bold text-blue-600">$360</span>
+                  <span className="text-4xl font-bold text-blue-600">${car.price * 3}</span>
                   <Info size={16} className="text-gray-300 relative top-0.5" />
                 </div>
                 <p className="text-xs text-gray-400 mt-1">for 3 days</p>
               </div>
               <ul className="text-sm text-gray-600 mb-6 space-y-3">
-                <li className="flex justify-between"><span>Car Rental (3d)</span><span className="font-bold text-gray-900">$360</span></li>
+                <li className="flex justify-between"><span>Car Rental (3d)</span><span className="font-bold text-gray-900">${car.price * 3}</span></li>
                 <li className="flex justify-between"><span>Taxes & Fees</span><span className="text-green-600 font-semibold">Included</span></li>
               </ul>
               <motion.button
@@ -253,7 +275,7 @@ const CarDetails = () => {
         >
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold text-blue-600">$360</span>
+              <span className="text-2xl font-bold text-blue-600">${car.price * 3}</span>
               <Info size={15} className="text-gray-300 relative top-0.5" />
             </div>
             <p className="text-[10px] text-gray-400 font-medium mt-0.5">Total · 3 days</p>

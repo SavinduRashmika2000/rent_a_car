@@ -3,50 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Star, MapPin, Heart } from 'lucide-react';
 
-const topDeals = [
-  {
-    id: 1,
-    name: 'BMW X5 2024',
-    rating: 4.8,
-    type: 'SUV',
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    seats: 5,
-    location: 'New York',
-    price: 120,
-    originalPrice: 150,
-    image: 'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600'
-  },
-  {
-    id: 2,
-    name: 'Mercedes C-Class 2024',
-    rating: 4.6,
-    type: 'Sedan',
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    seats: 5,
-    location: 'Los Angeles',
-    price: 95,
-    originalPrice: 120,
-    image: 'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600'
-  },
-  {
-    id: 3,
-    name: 'Toyota RAV4 2024',
-    rating: 4.5,
-    type: 'SUV',
-    transmission: 'Automatic',
-    fuel: 'Petrol',
-    seats: 5,
-    location: 'Chicago',
-    price: 80,
-    originalPrice: 100,
-    image: 'https://images.unsplash.com/photo-1621007947382-34dd86bbaee3?auto=format&fit=crop&q=80&w=600'
-  },
-];
-
 const TopDeals = () => {
   const navigate = useNavigate();
+  const [cars, setCars] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    fetch('http://localhost:8080/api/cars')
+      .then(res => res.json())
+      .then(data => {
+        setCars(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Error fetching cars:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <div className="mb-20 text-center py-10">Loading deals...</div>;
+  }
 
   return (
     <div className="mb-20">
@@ -70,7 +47,7 @@ const TopDeals = () => {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {topDeals.map((car, i) => (
+        {cars.map((car, i) => (
           <motion.div
             key={car.id}
             initial={{ opacity: 0, y: 28 }}
