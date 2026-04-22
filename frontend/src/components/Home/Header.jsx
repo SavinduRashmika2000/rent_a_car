@@ -7,6 +7,8 @@ import { useAuth } from '../../context/AuthContext';
 const Header = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  
+  console.log('Current user:', user);
 
   return (
     <motion.div
@@ -68,7 +70,7 @@ const Header = () => {
       <div className="flex items-center gap-4">
         {user ? (
           <>
-            {user.roles.includes('ROLE_ADMIN') && (
+            {user.roles?.includes('ROLE_ADMIN') && (
               <motion.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => navigate('/admin')}
