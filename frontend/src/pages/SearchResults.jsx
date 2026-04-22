@@ -146,7 +146,7 @@ const SearchResults = () => {
       {/* Cars List */}
       <div className="flex flex-col gap-4 mb-8 max-w-4xl mx-auto">
         {cars.map((car) => (
-          <div key={car.id} className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 hover:shadow-md transition-all">
+          <div key={car.id} className="bg-white p-4 rounded-3xl shadow-sm border border-gray-100 flex flex-col md:flex-row gap-4 hover:shadow-md transition-all cursor-pointer" onClick={() => navigate(`/car/${car.id}`)}>
             {/* Left Section: Image and Rating */}
             <div className="w-full md:w-[240px] flex flex-col items-center relative shrink-0 border-b md:border-b-0 md:border-r border-gray-50 pb-4 md:pb-0 md:pr-4">
               {car.badge && (
@@ -202,7 +202,10 @@ const SearchResults = () => {
                     </div>
                     <p className="text-gray-400 line-through text-xs font-medium">${car.originalPrice}</p>
                   </div>
-                  <button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-2.5 px-8 rounded-xl transition-all active:scale-95 text-sm shrink-0">
+                  <button 
+                    onClick={() => navigate(`/car/${car.id}`)}
+                    className="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-2.5 px-8 rounded-xl transition-all active:scale-95 text-sm shrink-0"
+                  >
                     Select
                   </button>
                 </div>
