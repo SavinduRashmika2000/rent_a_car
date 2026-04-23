@@ -41,9 +41,12 @@ public class CarController {
                     car.setName(carDetails.getName());
                     car.setRating(carDetails.getRating());
                     car.setType(carDetails.getType());
+                    car.setCategory(carDetails.getCategory());
                     car.setTransmission(carDetails.getTransmission());
                     car.setFuel(carDetails.getFuel());
                     car.setSeats(carDetails.getSeats());
+                    car.setDoors(carDetails.getDoors());
+                    car.setAc(carDetails.isAc());
                     car.setLocation(carDetails.getLocation());
                     car.setPrice(carDetails.getPrice());
                     car.setOriginalPrice(carDetails.getOriginalPrice());

@@ -22,9 +22,12 @@ public class Car {
     private String name;
     private Double rating;
     private String type;
+    private String category;
     private String transmission;
     private String fuel;
     private Integer seats;
+    private Integer doors;
+    private boolean ac;
     private String location;
     private Double price;
     private Double originalPrice;

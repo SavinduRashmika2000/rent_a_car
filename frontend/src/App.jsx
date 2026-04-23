@@ -8,10 +8,14 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import AdminDashboard from './pages/AdminDashboard';
 import BottomNav from './components/Common/BottomNav';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, useAuth } from './context/AuthContext';
 
 const AnimatedRoutes = () => {
+  const { loading } = useAuth();
   const location = useLocation();
+
+  if (loading) return null;
+
   return (
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname + location.search}>
