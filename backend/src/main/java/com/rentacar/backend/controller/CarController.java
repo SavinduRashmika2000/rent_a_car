@@ -47,7 +47,6 @@ public class CarController {
                     car.setSeats(carDetails.getSeats());
                     car.setDoors(carDetails.getDoors());
                     car.setAc(carDetails.isAc());
-                    car.setLocation(carDetails.getLocation());
                     car.setPrice(carDetails.getPrice());
                     car.setOriginalPrice(carDetails.getOriginalPrice());
                     car.setImage(carDetails.getImage());
