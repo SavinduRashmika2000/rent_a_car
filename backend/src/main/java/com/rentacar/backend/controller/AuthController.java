@@ -36,6 +36,11 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @GetMapping("/debug/users")
+    public List<User> debugUsers() {
+        return userRepository.findAll();
+    }
+
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
@@ -60,6 +65,11 @@ public class AuthController {
             return ResponseEntity.badRequest().body("Error: Your account has been deactivated. Please contact support.");
         } catch (org.springframework.security.core.AuthenticationException e) {
             return ResponseEntity.badRequest().body("Error: Invalid username or password.");
+        } catch (Exception e) {
+            java.io.StringWriter sw = new java.io.StringWriter();
+            java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+            e.printStackTrace(pw);
+            return ResponseEntity.status(500).body("Error: " + e.getMessage() + "\n" + sw.toString());
         }
     }
 

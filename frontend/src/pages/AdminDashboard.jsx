@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import PageTransition from '../components/Common/PageTransition';
+import CalendarPicker from '../components/Common/CalendarPicker';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
@@ -36,7 +37,7 @@ const AdminDashboard = () => {
   });
   const [carFormData, setCarFormData] = useState({
     name: '', type: 'SUV', category: 'Economy', transmission: 'Automatic', fuel: 'Petrol',
-    seats: 5, doors: 4, ac: true, location: '', price: '', originalPrice: '', rating: 4.5, image: '', available: true
+    seats: 5, doors: 4, ac: true, price: '', originalPrice: '', rating: 4.5, image: '', available: true
   });
   const [resFormData, setResFormData] = useState({
     carId: '', userId: '', startDate: '', days: '1', totalPrice: '0', status: 'CONFIRMED'
@@ -161,7 +162,7 @@ const AdminDashboard = () => {
         body: JSON.stringify(carFormData),
       });
       if (response.ok) {
-        setCarFormData({ name: '', type: 'SUV', category: 'Economy', transmission: 'Automatic', fuel: 'Petrol', seats: 5, doors: 4, ac: true, location: '', price: '', originalPrice: '', rating: 4.5, image: '', available: true });
+        setCarFormData({ name: '', type: 'SUV', category: 'Economy', transmission: 'Automatic', fuel: 'Petrol', seats: 5, doors: 4, ac: true, price: '', originalPrice: '', rating: 4.5, image: '', available: true });
         fetchCars();
         setMessage({ type: 'success', text: 'Car added successfully!' });
       }
@@ -357,9 +358,9 @@ const AdminDashboard = () => {
                         <input type="checkbox" checked={carFormData.ac} onChange={e => setCarFormData({...carFormData, ac: e.target.checked})} />
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <input type="number" placeholder="Price/Day" required value={carFormData.price} onChange={e => setCarFormData({...carFormData, price: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm" />
-                      <input type="text" placeholder="Location" required value={carFormData.location} onChange={e => setCarFormData({...carFormData, location: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm" />
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-bold">$</span>
+                      <input type="number" placeholder="Price per day" required value={carFormData.price} onChange={e => setCarFormData({...carFormData, price: e.target.value})} className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400" />
                     </div>
                     <div onDragOver={e => e.preventDefault()} onDrop={e => { e.preventDefault(); const url = e.dataTransfer.getData('text'); if(url) setCarFormData({...carFormData, image: url}); }} className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center bg-gray-50/50">
                       <p className="text-[10px] font-bold text-gray-400 uppercase mb-2">Drag Image URL Here</p>
@@ -376,7 +377,46 @@ const AdminDashboard = () => {
                     <div className="relative"><Search size={16} className="absolute left-3 top-2.5 text-gray-400" /><input type="text" placeholder="Search cars..." value={carSearch} onChange={e => setCarSearch(e.target.value)} className="pl-9 pr-4 py-2 bg-gray-50 border-none rounded-xl text-xs" /></div>
                   </div>
                   <div className="overflow-x-auto"><table className="w-full text-left"><thead><tr className="text-[10px] text-gray-400 font-black uppercase bg-gray-50/50"><th className="px-6 py-4">Car Details</th><th className="px-6 py-4">Specs</th><th className="px-6 py-4">Status</th><th className="px-6 py-4 text-right">Actions</th></tr></thead><tbody className="divide-y divide-gray-50">{filteredCars.map(c => (
-                    <tr key={c.id} className="hover:bg-gray-50/80 transition-all"><td className="px-6 py-5">{editingCar?.id === c.id ? <div className="space-y-2"><input type="text" value={editingCar.name} onChange={e => setEditingCar({...editingCar, name: e.target.value})} className="w-full px-2 py-1 border rounded text-sm" /><select value={editingCar.category} onChange={e => setEditingCar({...editingCar, category: e.target.value})} className="w-full px-2 py-1 border rounded text-xs"><option>Economy</option><option>Premium</option><option>Luxury</option></select></div> : <div className="flex items-center gap-4"><img src={c.image} className="w-16 h-10 object-cover rounded-xl shadow-sm" /><div><p className="font-black text-gray-900">{c.name}</p><span className="text-[9px] px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full font-bold uppercase">{c.category}</span></div></div>}</td><td className="px-6 py-5"><div className="flex flex-wrap gap-2">{editingCar?.id === c.id ? <div className="grid grid-cols-3 gap-1"><input type="number" value={editingCar.seats} onChange={e => setEditingCar({...editingCar, seats: parseInt(e.target.value)})} className="w-full border p-1 rounded text-xs" /><input type="number" value={editingCar.doors} onChange={e => setEditingCar({...editingCar, doors: parseInt(e.target.value)})} className="w-full border p-1 rounded text-xs" /><div className="flex items-center"><input type="checkbox" checked={editingCar.ac} onChange={e => setEditingCar({...editingCar, ac: e.target.checked})} /></div></div> : <><div className="flex items-center gap-1 text-[10px] text-gray-500 font-bold bg-gray-50 px-2 py-1 rounded-lg"><Users2 size={12} /> {c.seats}</div><div className="flex items-center gap-1 text-[10px] text-gray-500 font-bold bg-gray-50 px-2 py-1 rounded-lg"><DoorClosed size={12} /> {c.doors}</div>{c.ac && <div className="flex items-center gap-1 text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-1 rounded-lg"><Wind size={12} /> AC</div>}</>}</div></td><td className="px-6 py-5">{editingCar?.id === c.id ? <button onClick={() => setEditingCar({...editingCar, available: !editingCar.available})} className={`px-4 py-1.5 rounded-xl text-[10px] font-black ${editingCar.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{editingCar.available ? 'AVAILABLE' : 'OFFLINE'}</button> : <div className={`inline-flex px-4 py-1.5 rounded-xl text-[10px] font-black ${c.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{c.available ? 'AVAILABLE' : 'OFFLINE'}</div>}</td><td className="px-6 py-5 text-right">{editingCar?.id === c.id ? <div className="flex justify-end gap-2"><button onClick={handleUpdateCar} className="p-2 bg-green-600 text-white rounded-lg"><Check size={14} /></button><button onClick={() => setEditingCar(null)} className="p-2 bg-gray-200 text-gray-600 rounded-lg"><X size={14} /></button></div> : <button onClick={() => setEditingCar({...c})} className="p-2.5 bg-gray-50 text-gray-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit2 size={16} /></button>}</td></tr>
+                    <tr key={c.id} className="hover:bg-gray-50/80 transition-all">
+                      <td className="px-6 py-5">
+                        {editingCar?.id === c.id
+                          ? <div className="space-y-2">
+                              <input type="text" value={editingCar.name} onChange={e => setEditingCar({...editingCar, name: e.target.value})} className="w-full px-3 py-2 bg-white border-2 border-blue-300 rounded-xl text-sm font-bold text-gray-900 focus:outline-none focus:border-blue-500" />
+                              <select value={editingCar.category} onChange={e => setEditingCar({...editingCar, category: e.target.value})} className="w-full px-3 py-2 bg-white border-2 border-blue-200 rounded-xl text-xs font-bold text-gray-700 focus:outline-none focus:border-blue-500">
+                                <option>Economy</option><option>Premium</option><option>Luxury</option>
+                              </select>
+                            </div>
+                          : <div className="flex items-center gap-4">
+                              <img src={c.image} className="w-16 h-10 object-cover rounded-xl shadow-sm" />
+                              <div><p className="font-black text-gray-900">{c.name}</p><span className="text-[9px] px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full font-bold uppercase">{c.category}</span></div>
+                            </div>
+                        }
+                      </td>
+                      <td className="px-6 py-5">
+                        {editingCar?.id === c.id
+                          ? <div className="space-y-2">
+                              <div className="flex gap-2">
+                                <div className="flex-1">
+                                  <label className="text-[9px] font-black text-gray-400 uppercase block mb-1">Seats</label>
+                                  <input type="number" value={editingCar.seats} onChange={e => setEditingCar({...editingCar, seats: parseInt(e.target.value)})} className="w-full px-3 py-2 bg-white border-2 border-blue-200 rounded-xl text-xs font-bold text-gray-900 focus:outline-none focus:border-blue-500" />
+                                </div>
+                                <div className="flex-1">
+                                  <label className="text-[9px] font-black text-gray-400 uppercase block mb-1">Doors</label>
+                                  <input type="number" value={editingCar.doors} onChange={e => setEditingCar({...editingCar, doors: parseInt(e.target.value)})} className="w-full px-3 py-2 bg-white border-2 border-blue-200 rounded-xl text-xs font-bold text-gray-900 focus:outline-none focus:border-blue-500" />
+                                </div>
+                              </div>
+                              <label className="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" checked={editingCar.ac} onChange={e => setEditingCar({...editingCar, ac: e.target.checked})} className="w-4 h-4 accent-blue-600" />
+                                <span className="text-xs font-bold text-gray-700">Air Conditioning</span>
+                              </label>
+                            </div>
+                          : <div className="flex flex-wrap gap-2">
+                              <div className="flex items-center gap-1.5 text-[11px] text-gray-700 font-bold bg-gray-100 px-3 py-1.5 rounded-lg"><Users2 size={12} className="text-gray-500" /> {c.seats} Seats</div>
+                              <div className="flex items-center gap-1.5 text-[11px] text-gray-700 font-bold bg-gray-100 px-3 py-1.5 rounded-lg"><DoorClosed size={12} className="text-gray-500" /> {c.doors} Doors</div>
+                              {c.ac && <div className="flex items-center gap-1.5 text-[11px] text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded-lg"><Wind size={12} /> AC</div>}
+                            </div>
+                        }
+                      </td><td className="px-6 py-5">{editingCar?.id === c.id ? <button onClick={() => setEditingCar({...editingCar, available: !editingCar.available})} className={`px-4 py-1.5 rounded-xl text-[10px] font-black ${editingCar.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{editingCar.available ? 'AVAILABLE' : 'OFFLINE'}</button> : <div className={`inline-flex px-4 py-1.5 rounded-xl text-[10px] font-black ${c.available ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>{c.available ? 'AVAILABLE' : 'OFFLINE'}</div>}</td><td className="px-6 py-5 text-right">{editingCar?.id === c.id ? <div className="flex justify-end gap-2"><button onClick={handleUpdateCar} className="p-2 bg-green-600 text-white rounded-lg"><Check size={14} /></button><button onClick={() => setEditingCar(null)} className="p-2 bg-gray-200 text-gray-600 rounded-lg"><X size={14} /></button></div> : <button onClick={() => setEditingCar({...c})} className="p-2.5 bg-gray-50 text-gray-400 rounded-xl hover:bg-blue-600 hover:text-white transition-all"><Edit2 size={16} /></button>}</td></tr>
                   ))}</tbody></table></div>
                 </div>
               </div>
@@ -407,11 +447,13 @@ const AdminDashboard = () => {
                         {usersList.filter(u => u.role === 'CUSTOMER').map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
                       </select>
                     </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider ml-1 mb-1 block">Start Date</label>
-                        <input type="date" required value={resFormData.startDate} onChange={e => setResFormData({...resFormData, startDate: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-xs" />
-                      </div>
+                    <div className="space-y-4">
+                      <CalendarPicker
+                        label="Start Date"
+                        placeholder="Pick a start date"
+                        value={resFormData.startDate}
+                        onChange={val => setResFormData({...resFormData, startDate: val})}
+                      />
                       <div>
                         <label className="text-[10px] font-black text-gray-400 uppercase tracking-wider ml-1 mb-1 block">Duration (Days)</label>
                         <input type="number" min="1" required value={resFormData.days} onChange={e => setResFormData({...resFormData, days: e.target.value})} className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm" />

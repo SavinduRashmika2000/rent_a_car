@@ -19,13 +19,23 @@ public class DataSeeder {
                                  ReservationRepository reservationRepository,
                                  PasswordEncoder encoder) {
         return args -> {
+            userRepository.findByEmail("admin@rentacar.com").ifPresentOrElse(
+                admin -> {
+                    admin.setPassword(encoder.encode("admin123"));
+                    userRepository.save(admin);
+                    System.out.println("Admin password updated.");
+                },
+                () -> {
+                    userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN, true));
+                    System.out.println("Admin user created.");
+                }
+            );
+            
             if (userRepository.count() <= 1) {
-                userRepository.deleteAll(); // Clear and re-seed for development
-                userRepository.save(new User(null, "Admin", "admin@rentacar.com", "0771234567", encoder.encode("admin123"), Role.ADMIN, true));
                 userRepository.save(new User(null, "John Doe", "john@example.com", "0771112223", encoder.encode("user123"), Role.CUSTOMER, true));
                 userRepository.save(new User(null, "Jane Smith", "jane@example.com", "0774445556", encoder.encode("user123"), Role.CUSTOMER, true));
                 userRepository.save(new User(null, "Michael Brown", "michael@example.com", "0778889990", encoder.encode("user123"), Role.CUSTOMER, false));
-                System.out.println("Admin and sample users created.");
+                System.out.println("Sample users created.");
             }
             
             if (carRepository.count() == 0) {

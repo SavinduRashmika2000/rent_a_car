@@ -10,15 +10,17 @@ import java.util.List;
 
 public class UserDetailsImpl implements UserDetails {
     private Long id;
+    private String name;
     private String email;
     private String phone;
     private String password;
     private boolean active;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String email, String phone, String password, boolean active,
+    public UserDetailsImpl(Long id, String name, String email, String phone, String password, boolean active,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
+        this.name = name;
         this.email = email;
         this.phone = phone;
         this.password = password;
@@ -31,6 +33,7 @@ public class UserDetailsImpl implements UserDetails {
 
         return new UserDetailsImpl(
                 user.getId(),
+                user.getName(),
                 user.getEmail(),
                 user.getPhone(),
                 user.getPassword(),
@@ -75,6 +78,10 @@ public class UserDetailsImpl implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
