@@ -28,7 +28,6 @@ public class Car {
     private Integer seats;
     private Integer doors;
     private boolean ac;
-    private String location;
     private Double price;
     private Double originalPrice;
     private String image;

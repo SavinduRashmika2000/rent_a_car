@@ -40,12 +40,12 @@ public class DataSeeder {
             
             if (carRepository.count() == 0) {
                 carRepository.saveAll(List.of(
-                    // id, name, rating, type, category, trans, fuel, seats, doors, ac, location, price, origPrice, image, available
-                    new Car(null, "BMW X5 2024", 4.8, "SUV", "Luxury", "Automatic", "Petrol", 5, 5, true, "New York", 120.0, 150.0, "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600", true),
-                    new Car(null, "Mercedes C-Class 2024", 4.6, "Sedan", "Premium", "Automatic", "Petrol", 5, 4, true, "Los Angeles", 95.0, 120.0, "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600", true),
-                    new Car(null, "Toyota RAV4 2024", 4.5, "SUV", "Economy", "Automatic", "Petrol", 5, 5, true, "Chicago", 80.0, 100.0, "https://images.unsplash.com/photo-1621007947382-34dd86bbaee3?auto=format&fit=crop&q=80&w=600", true),
-                    new Car(null, "Audi A4 2024", 4.7, "Sedan", "Premium", "Automatic", "Petrol", 5, 4, true, "Miami", 110.0, 130.0, "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=600", true),
-                    new Car(null, "Tesla Model 3", 4.9, "Sedan", "Luxury", "Automatic", "Electric", 5, 4, true, "San Francisco", 90.0, 110.0, "https://images.unsplash.com/photo-1536700503339-1e4b06520771?auto=format&fit=crop&q=80&w=600", true)
+                    // id, name, rating, type, category, trans, fuel, seats, doors, ac, price, origPrice, image, available
+                    new Car(null, "BMW X5 2024", 4.8, "SUV", "Luxury", "Automatic", "Petrol", 5, 5, true, 120.0, 150.0, "https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=600", true),
+                    new Car(null, "Mercedes C-Class 2024", 4.6, "Sedan", "Premium", "Automatic", "Petrol", 5, 4, true, 95.0, 120.0, "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&q=80&w=600", true),
+                    new Car(null, "Toyota RAV4 2024", 4.5, "SUV", "Economy", "Automatic", "Petrol", 5, 5, true, 80.0, 100.0, "https://images.unsplash.com/photo-1621007947382-34dd86bbaee3?auto=format&fit=crop&q=80&w=600", true),
+                    new Car(null, "Audi A4 2024", 4.7, "Sedan", "Premium", "Automatic", "Petrol", 5, 4, true, 110.0, 130.0, "https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?auto=format&fit=crop&q=80&w=600", true),
+                    new Car(null, "Tesla Model 3", 4.9, "Sedan", "Luxury", "Automatic", "Electric", 5, 4, true, 90.0, 110.0, "https://images.unsplash.com/photo-1536700503339-1e4b06520771?auto=format&fit=crop&q=80&w=600", true)
                 ));
                 System.out.println("Database seeded with sample cars.");
             }
